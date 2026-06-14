@@ -1,0 +1,55 @@
+# ROGII Wellbore Geology Prediction - System Rules & Standards
+
+## 1. System & Hardware Architecture Context
+
+- **OS**: Ubuntu 26.04 LTS
+- **Compute**: Local Nvidia RTX 5080 Laptop GPU
+- **Execution Target**: Target variable is `tvt` (True Vertical Thickness / spatial metric) evaluated strictly via Root Mean Squared Error (RMSE).
+- **Inference Constraint**: Submission runs inside a disconnected Kaggle Notebook (No Internet, <= 9 hours GPU/CPU runtime). All external packages or checkpoints must be staged in `data/external/` for offline installation/loading.
+
+## 2. Code Engineering & Python Standards (PEP 8)
+
+- **Language Level**: Python 3.12+ syntax.
+- **Strict Typing**: All function signatures must include explicit type hints (`typing` module) for parameters and return types.
+- **Documentation**: All modules, classes, and public functions require comprehensive Google-style docstrings:
+
+  ```python
+  """Brief description of function.
+
+  Args:
+      param1 (type): Description.
+
+  Returns:
+      type: Description.
+  """
+  ```
+
+- **Separation of Concerns**: Core processing logic must be modularized into production scripts inside src/. Jupyter Notebooks (notebooks/) are isolated exclusively for initial EDA, quick visualizations, and validation logs.
+
+## 3. Computational Strategy & VRAM Management
+
+- **High-Performance EDA & IO**: Prioritize polars or cudf over traditional pandas for handling tabular extractions to minimize overhead and accelerate I/O operations.
+
+- **GPU Acceleration**: Configure modeling frameworks to utilize your local RTX 5080 compute power:
+
+- **XGBoost / LightGBM**: Enforce device="cuda" or tree_method="hist" with GPU acceleration options.
+
+- **CatBoost**: Set task_type="GPU".
+
+- **PyTorch**: Ensure tensors are cast to the target CUDA device context.
+
+- **Memory Disposals**: Explicitly invoke garbage collection (gc.collect()) and clear the GPU cache (torch.cuda.empty_cache() or framework equivalent) immediately after completing fold validations to prevent out-of-memory (OOM) leaks.
+
+## 4. Reproducibility & Validation Integrity
+
+- **Global Seeding**: A unified determinism utility must seed numpy, random, polars, torch, and all tree boosters across both src/ and notebooks/ before executing computations.
+
+- **Geostatistical Leakage Prevention**: Never implement completely random train-test splits. To maintain structural integrity against highly correlated spatial telemetry data, cross-validation boundaries must be separated out using Group-K-Fold split regimes grouped explicitly by individual well_id identifiers.
+
+## 5. Interaction Protocol for LLMs (Cline & Continue)
+
+- **Granular Updates**: Do not output an entire script when editing existing logic. Generate targeted, high-precision contextual diffs or replace modular blocks directly.
+
+- **Feature Traceability**: Any engineered transformation or structural adjustment must be accompanied by an analytical comment in the code clarifying its underlying geostatistical or mechanical reasoning.
+
+- **Experiment Tracking**: After executing modifications to models or cross-validation architectures, append a localized metric summary to docs/03_experiments.md detailing the timestamp, configuration changes, out-of-fold validation scores, and resource footprint.

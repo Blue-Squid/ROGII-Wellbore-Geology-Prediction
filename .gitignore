@@ -1,0 +1,49 @@
+# ==========================================
+# Data & Datasets (Never commit data files)
+# ==========================================
+data/
+# If you decide to track .gitkeep files to maintain the empty folder structure:
+!data/**/.gitkeep
+
+# ==========================================
+# ML Models & Cache Artifacts
+# ==========================================
+*.xgb
+*.lgb
+*.pt
+*.pkl
+*.h5
+*.onnx
+models/
+artifacts/
+
+# ==========================================
+# IDEs & Editor Configuration
+# ==========================================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# ==========================================
+# Python Runtime & OS Bloat
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+
+# ==========================================
+# Environment & Secret Configurations
+# ==========================================
+.env
+.venv
+env/
+venv/
+ENV/

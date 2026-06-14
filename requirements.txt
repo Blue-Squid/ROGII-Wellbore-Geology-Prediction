@@ -1,0 +1,19 @@
+# requirements.txt
+# Core Processing
+polars>=1.0.0
+numpy>=2.0.0
+pandas>=2.2.0
+
+# Machine Learning & Optimization
+scikit-learn>=1.5.0
+lightgbm>=4.4.0
+xgboost>=2.1.0
+catboost>=1.2.5
+optuna>=3.6.0
+
+# Deep Learning (RTX 5080 / CUDA 12+ compatible)
+torch>=2.3.0
+
+# Utilities & Infrastructure
+pyarrow>=16.0.0
+tqdm>=4.66.0
